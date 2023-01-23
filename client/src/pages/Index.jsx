@@ -20,7 +20,7 @@ const Index = () => {
   return (
     <Loading loading={loading} error={error}>
       <PostList data={records} deleteRecord={deleteRecord} />
-    </Loading>
+    </Loading> 
   );
 };
 

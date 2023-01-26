@@ -1,8 +1,21 @@
 import usePostDetails from "../hooks/use-post-details";
 import Loading from "../components/Loading";
+import {clearRecord} from "../store/postSlice"
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 
 
 const Details = () => {
+
+  const dispatch = useDispatch(); 
+  
+  useEffect(() => {
+    return () => {
+      dispatch(clearRecord())
+    }
+  }, [dispatch])
+
+
   const { loading, error, record } = usePostDetails(); 
   return ( 
     <div>

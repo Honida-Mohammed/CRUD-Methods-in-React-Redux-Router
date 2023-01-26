@@ -68,10 +68,30 @@ export const insertPost = createAsyncThunk(
   }
 );
 
+export const editPost = createAsyncThunk("posts/editPost",   async (item, thunkAPI) => {
+  const { rejectWithValue } = thunkAPI; 
+
+  try {
+    const res = await fetch(`http://localhost:5000/posts/${item.id}`, {
+      method: "PATCH",
+      body: JSON.stringify(item),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    return rejectWithValue(error.message);
+  }
+})
+
 const postSlice = createSlice({
   name: "posts",
   initialState,
-  reducers: {},
+  reducers: {
+     clearRecord: (state) => state.record = null
+  },
   extraReducers: {
     //fetch posts
     [fetchPosts.pending]: (state) => {
@@ -89,8 +109,7 @@ const postSlice = createSlice({
     //get post
     [fetchPost.pending]: (state) => {
       state.loading = true;
-      state.error = null;
-      state.record = null;
+      state.error = null; 
     },
     [fetchPost.fulfilled]: (state, action) => {
       state.loading = false;
@@ -128,7 +147,20 @@ const postSlice = createSlice({
     },
 
     //edit post
+    [editPost.pending]: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    [editPost.fulfilled]: (state, action) => {
+      state.loading = false; 
+      state.record = action.payload;
+    },
+    [editPost.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
   },
 });
 
+export const {clearRecord} = postSlice.actions;
 export default postSlice.reducer;

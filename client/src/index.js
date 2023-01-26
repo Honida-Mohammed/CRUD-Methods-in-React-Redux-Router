@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Provider } from "react-redux";
-import store from "./state";
+import store from "./store/index";
 
 import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";

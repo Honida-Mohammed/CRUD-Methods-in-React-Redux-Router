@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
 import usePostDetails from "../hooks/use-post-details";
+import { useDispatch } from "react-redux";
+import { editPost, clearRecord} from "../store/postSlice";
+import { useNavigate } from "react-router-dom";
+
 import Loading from "../components/Loading";
 import { Form, Button } from "react-bootstrap";
 
@@ -9,15 +13,27 @@ const EditPost = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
+  const dispatch = useDispatch(); 
+  const navigate = useNavigate();
+
   useEffect(() => {
-    if (record && !title && !description) {
+    if (record) {
       setTitle(record?.title);
       setDescription(record?.description);
     }
-  }, [record, title, description]);
+  }, [record]);
+
+  
+  useEffect(() => {
+    return () => {
+      dispatch(clearRecord())
+    }
+  }, [dispatch])
+
 
   const formHandler = (e) => {
     e.preventDefault();
+    dispatch(editPost({id: record?.id, title, description})).unwrap().then(() => navigate("/"));
   };
 
   return (
